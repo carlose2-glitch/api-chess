@@ -1,9 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class LoginService {
+export class LoginService extends PrismaClient implements OnModuleInit {
+  private readonly logger = new Logger('Chess-service');
+
+  async onModuleInit() {
+    await this.$connect();
+    this.logger.log('Database Connected');
+  }
   create(createLoginDto: CreateLoginDto) {
     return 'This action adds a new login';
   }
