@@ -29,7 +29,7 @@ export class SingService extends PrismaClient implements OnModuleInit {
 
       if (!findUser) {
         //encriptar clave
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         const passwordBycrypt: string = await hash(createSingDto.password, 10);
 
         /*guardar en la base de datos*/
@@ -44,21 +44,25 @@ export class SingService extends PrismaClient implements OnModuleInit {
         /*generar el jwt */
 
         const payload = {
-          id: data.id,
+          id: passwordBycrypt,
           name: data.user,
         };
 
         const token = await this.jwtAuthService.signAsync(payload);
 
         return {
-          r: 'usuario creado',
+          token: token,
+          r: 'Usuario creado',
         };
       } else {
         throw new Error('El usuario o correo ya existe');
       }
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-      return error.message;
+      return {
+        token: '',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        r: error.message,
+      };
     }
   }
 }

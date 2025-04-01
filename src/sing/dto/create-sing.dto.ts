@@ -1,4 +1,4 @@
-import { IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsNumber, IsString, Min } from 'class-validator';
 
 export class CreateSingDto {
   @IsString()
@@ -11,6 +11,6 @@ export class CreateSingDto {
   password: string;
 
   @IsNumber()
-  @IsPositive()
+  @Min(0)
   points: number;
 }
