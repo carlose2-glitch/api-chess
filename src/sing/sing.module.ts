@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_KEY,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '5m' },
     }),
   ],
   controllers: [SingController],
