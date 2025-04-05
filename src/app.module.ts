@@ -17,6 +17,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.POSTGRES_DATABASE,
       entities: [],
       synchronize: true,
+      ssl: process.env.POSTGRES_SSL === 'true',
+      extra: {
+        ssl:
+          process.env.POSTGRES_SSL === 'true'
+            ? { rejectUnauthorized: false }
+            : null,
+      },
     }),
     SingModule,
     LoginModule,
