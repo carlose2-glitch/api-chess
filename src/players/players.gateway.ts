@@ -3,31 +3,33 @@ import {
   SubscribeMessage,
   MessageBody,
   WebSocketServer,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { PlayersService } from './players.service';
-import { CreatePlayerDto } from './dto/create-player.dto';
 
 import { Server, Socket } from 'socket.io';
+import { OnModuleInit } from '@nestjs/common';
 
 @WebSocketGateway({ cors: true })
-export class PlayersGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
-  constructor(private readonly playersService: PlayersService) {}
-
+export class PlayersGateway implements OnModuleInit {
   @WebSocketServer()
   public server: Server;
+  constructor(private readonly playersService: PlayersService) {}
+  /*manejador del cliente conectado */
+  onModuleInit() {
+    this.server.on('connection', (socket: Socket) => {
+      const { user } = socket.handshake.auth;
 
-  handleConnection(@ConnectedSocket() client: Socket) {
-    console.log('Cliente conectado ', client.handshake.auth.user);
-    client.broadcast.emit('on-connect', 'conectado');
-  }
-  handleDisconnect(@ConnectedSocket() client: Socket) {
-    console.log('Cliente desconectado', client.handshake.auth.user);
-    client.broadcast.emit('off-disconnect', 'conectado');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      this.playersService.onUsersConnected({ user: user, online: true });
+      this.server.emit('clients-online', this.playersService.getUsers());
+
+      socket.on('disconnect', () => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        this.playersService.onUsersDiconnect(user);
+        this.server.emit('clients-online', this.playersService.getUsers());
+      });
+    });
   }
 
   /* @SubscribeMessage('conexion')
@@ -37,19 +39,4 @@ export class PlayersGateway
   ) {
     client.broadcast.emit('');
   }*/
-
-  @SubscribeMessage('findAllPlayers')
-  findAll() {
-    return this.playersService.findAll();
-  }
-
-  @SubscribeMessage('findOnePlayer')
-  findOne(@MessageBody() id: number) {
-    return this.playersService.findOne(id);
-  }
-
-  @SubscribeMessage('removePlayer')
-  remove(@MessageBody() id: number) {
-    return this.playersService.remove(id);
-  }
 }

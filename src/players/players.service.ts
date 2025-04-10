@@ -1,21 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePlayerDto } from './dto/create-player.dto';
+
+interface Users {
+  user: string;
+  online: boolean;
+}
 
 @Injectable()
 export class PlayersService {
-  create(createPlayerDto: any) {
-    return 'This action adds a new player';
-  }
+  private users: Record<string, Users> = {};
 
-  findAll() {
-    return `This action returns all players`;
+  onUsersConnected(user: Users) {
+    this.users[user.user] = user;
+    console.log(this.users);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} player`;
+  onUsersDiconnect(user: string) {
+    delete this.users[user];
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} player`;
+  getUsers() {
+    return Object.values(this.users);
   }
 }
