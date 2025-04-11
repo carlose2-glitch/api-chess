@@ -9,6 +9,7 @@ import { PlayersService } from './players.service';
 
 import { Server, Socket } from 'socket.io';
 import { OnModuleInit } from '@nestjs/common';
+import { invitationDto } from './dto/create-player.dto';
 
 @WebSocketGateway({ cors: true })
 export class PlayersGateway implements OnModuleInit {
@@ -32,11 +33,11 @@ export class PlayersGateway implements OnModuleInit {
     });
   }
 
-  /* @SubscribeMessage('conexion')
+  @SubscribeMessage('invitation')
   conexion(
     @ConnectedSocket() client: Socket,
-    @MessageBody() createPlayerDto: any,
+    @MessageBody() data: invitationDto,
   ) {
-    client.broadcast.emit('');
-  }*/
+    client.broadcast.emit(data.userTo, data);
+  }
 }
