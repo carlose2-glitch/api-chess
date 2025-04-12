@@ -9,7 +9,9 @@ import { PlayersService } from './players.service';
 
 import { Server, Socket } from 'socket.io';
 import { OnModuleInit } from '@nestjs/common';
-import { invitationDto } from './dto/create-player.dto';
+import { invitationDto } from './dto/invitationPlayer.dto';
+
+import { canceledDto } from './dto/canceledPlayer.dto';
 
 @WebSocketGateway({ cors: true })
 export class PlayersGateway implements OnModuleInit {
@@ -21,8 +23,11 @@ export class PlayersGateway implements OnModuleInit {
     this.server.on('connection', (socket: Socket) => {
       const { user } = socket.handshake.auth;
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      this.playersService.onUsersConnected({ user: user, online: true });
+      this.playersService.onUsersConnected({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        user: user,
+        online: true,
+      });
       this.server.emit('clients-online', this.playersService.getUsers());
 
       socket.on('disconnect', () => {
@@ -32,12 +37,33 @@ export class PlayersGateway implements OnModuleInit {
       });
     });
   }
-
+  /*invitacion del jugador */
   @SubscribeMessage('invitation')
   conexion(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: invitationDto,
   ) {
     client.broadcast.emit(data.userTo, data);
+  }
+  /*aceptar invitacion */
+
+  /* cancelar invitacion de parte del invitado*/
+  @SubscribeMessage('canceled-invited')
+  canceledInvited(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: canceledDto,
+  ) {
+    const emit = data.userTo + 'canceled';
+    client.broadcast.emit(emit, data.closeModal);
+  }
+  /*cancelar invitacion del que invita */
+  @SubscribeMessage('canceled-invite')
+  canceledInvite(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: canceledDto,
+  ) {
+    const emit = data.userTo + 'invite';
+    console.log(data);
+    client.broadcast.emit(emit, data.closeModal);
   }
 }

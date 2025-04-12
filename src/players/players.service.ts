@@ -11,11 +11,11 @@ export class PlayersService {
 
   onUsersConnected(user: Users) {
     this.users[user.user] = user;
-    console.log(this.users);
   }
   onUsersDiconnect(user: string) {
     delete this.users[user];
   }
+
   getUsers() {
     return Object.values(this.users);
   }
