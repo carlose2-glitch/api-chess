@@ -12,6 +12,8 @@ import { OnModuleInit } from '@nestjs/common';
 import { invitationDto } from './dto/invitationPlayer.dto';
 
 import { canceledDto } from './dto/canceledPlayer.dto';
+import { Accept } from './dto/acceptInvitation.dto';
+import { TokenMatch } from './dto/dataToken.dto';
 
 @WebSocketGateway({ cors: true })
 export class PlayersGateway implements OnModuleInit {
@@ -45,7 +47,29 @@ export class PlayersGateway implements OnModuleInit {
   ) {
     client.broadcast.emit(data.userTo, data);
   }
-  /*aceptar invitacion */
+  /*aceptar invitacion invitado*/
+  @SubscribeMessage('accept-invitation')
+  async acceptInvitation(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: Accept,
+  ) {
+    const emit = data.userTo + 'accepted';
+
+    const token = await this.playersService.generateToken(data);
+
+    client.broadcast.emit(emit, token);
+  }
+  /*redireccionamiento del que invita */
+  @SubscribeMessage('redirect-accept')
+  acceptRedirect(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: TokenMatch,
+  ) {
+    const emit = data.userTo + 'token';
+    console.log(emit);
+
+    client.broadcast.emit(emit, data.token);
+  }
 
   /* cancelar invitacion de parte del invitado*/
   @SubscribeMessage('canceled-invited')
@@ -63,7 +87,7 @@ export class PlayersGateway implements OnModuleInit {
     @MessageBody() data: canceledDto,
   ) {
     const emit = data.userTo + 'invite';
-    console.log(data);
+
     client.broadcast.emit(emit, data.closeModal);
   }
 }
