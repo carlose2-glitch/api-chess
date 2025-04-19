@@ -6,9 +6,10 @@ import { LoginModule } from './login/login.module';
 import { tokenModule } from './token/token.module';
 import { PlayersModule } from './players/players.module';
 import { UsersModule } from './users/users.module';
+import { GameModule } from './game/game.module';
 
 @Module({
-  imports: [SingModule, LoginModule, tokenModule, PlayersModule, UsersModule],
+  imports: [SingModule, LoginModule, tokenModule, PlayersModule, UsersModule, GameModule],
   controllers: [AppController],
   providers: [AppService],
 })
