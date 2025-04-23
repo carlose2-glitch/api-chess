@@ -20,3 +20,17 @@ model Users{
   password String
   points Int
 }
+
+
+model Board {
+  id Int @default(autoincrement()) @id
+  movements Int
+  modality String
+  blackWiner Boolean?
+  whiteWiner Boolean? 
+  userBlack String?
+  userWhite String?
+  game String
+  time String?
+  pieces Json
+}

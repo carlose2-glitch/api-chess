@@ -7,9 +7,10 @@ import { tokenModule } from './token/token.module';
 import { PlayersModule } from './players/players.module';
 import { UsersModule } from './users/users.module';
 import { GameModule } from './game/game.module';
+import { BoardModule } from './board/board.module';
 
 @Module({
-  imports: [SingModule, LoginModule, tokenModule, PlayersModule, UsersModule, GameModule],
+  imports: [SingModule, LoginModule, tokenModule, PlayersModule, UsersModule, GameModule, BoardModule],
   controllers: [AppController],
   providers: [AppService],
 })

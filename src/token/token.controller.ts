@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { DeapertureDto } from './dto/deaperture.dto';
 
 @Controller('token')
 export class tokenController {
@@ -25,45 +24,6 @@ export class tokenController {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         r: error,
       };
-    }
-  }
-  @Post('/deaperture')
-  async deaperture(@Body() de: DeapertureDto) {
-    console.log(de);
-
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const dataUser = await this.jwtAuthService.verifyAsync(de.tokenUser);
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const dataDe = await this.jwtAuthService.verifyAsync(de.tokenDe);
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (dataUser.name === dataDe.userFrom) {
-        return {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          name: dataUser.name,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          enemy: dataDe.userTo,
-          color: 'black',
-          juego: 1,
-        };
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (dataUser.name === dataDe.userTo) {
-        return {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          name: dataUser.name,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          enemy: dataDe.userFrom,
-          color: 'white',
-          juego: 0,
-        };
-      }
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return error;
     }
   }
 }

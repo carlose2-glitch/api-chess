@@ -9,7 +9,7 @@ import { GameService } from './game.service';
 import { Socket } from 'socket.io';
 import { MovementDto } from './dto/create-game.dto';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class GameGateway {
   constructor(private readonly gameService: GameService) {}
 
@@ -20,7 +20,7 @@ export class GameGateway {
   ) {
     const emit = moEnemy.userTo + 'movement';
 
-    console.log(moEnemy);
+    this.gameService.updateMovement(moEnemy.movements, moEnemy.id);
 
     client.broadcast.emit(emit, moEnemy);
   }

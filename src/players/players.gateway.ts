@@ -55,9 +55,11 @@ export class PlayersGateway implements OnModuleInit {
   ) {
     const emit = data.userTo + 'accepted';
 
-    const token = await this.playersService.generateToken(data);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const id = await this.playersService.createTable(data);
 
-    client.broadcast.emit(emit, token);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    client.broadcast.emit(emit, id.id);
   }
   /*redireccionamiento del que invita */
   @SubscribeMessage('redirect-accept')
@@ -66,9 +68,8 @@ export class PlayersGateway implements OnModuleInit {
     @MessageBody() data: TokenMatch,
   ) {
     const emit = data.userTo + 'token';
-    console.log(emit);
 
-    client.broadcast.emit(emit, data.token);
+    client.broadcast.emit(emit, data.id);
   }
 
   /* cancelar invitacion de parte del invitado*/

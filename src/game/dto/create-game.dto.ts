@@ -11,4 +11,6 @@ export class MovementDto {
   row: string;
   @IsNumber()
   movements: number;
+  @IsNumber()
+  id: number;
 }
