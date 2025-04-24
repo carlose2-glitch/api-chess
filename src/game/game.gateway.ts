@@ -14,13 +14,13 @@ export class GameGateway {
   constructor(private readonly gameService: GameService) {}
 
   @SubscribeMessage('movement-piece')
-  movement(
+  async movement(
     @ConnectedSocket() client: Socket,
     @MessageBody() moEnemy: MovementDto,
   ) {
     const emit = moEnemy.userTo + 'movement';
 
-    this.gameService.updateMovement(moEnemy.movements, moEnemy.id);
+    await this.gameService.updateMovement(moEnemy.movements, moEnemy.id);
 
     client.broadcast.emit(emit, moEnemy);
   }
