@@ -9,8 +9,6 @@ export class GameService extends PrismaClient implements OnModuleInit {
     this.logger.log('Database Connected');
   }
   async updateMovement(movements: number, id: number) {
-    console.log(movements);
-
     try {
       await this.board.update({
         where: {

@@ -21,7 +21,7 @@ export class BoardService extends PrismaClient implements OnModuleInit {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const tokenUser = await this.jwtAuthService.verifyAsync(boardDto.token);
 
-      const board = await this.board.findFirst({
+      const data = await this.board.findFirst({
         where: {
           OR: [
             {
@@ -45,7 +45,7 @@ export class BoardService extends PrismaClient implements OnModuleInit {
         },
       });
 
-      if (!board) {
+      if (!data) {
         throw new Error('');
       }
 
@@ -53,7 +53,7 @@ export class BoardService extends PrismaClient implements OnModuleInit {
         status: 200,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
         name: tokenUser.name,
-        board: board,
+        board: data,
       };
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
