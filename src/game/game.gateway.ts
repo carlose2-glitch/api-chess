@@ -20,7 +20,11 @@ export class GameGateway {
   ) {
     const emit = moEnemy.userTo + 'movement';
 
-    await this.gameService.updateMovement(moEnemy.movements, moEnemy.id);
+    await this.gameService.updateMovement(
+      moEnemy.movements,
+      moEnemy.id,
+      moEnemy.array,
+    );
 
     client.broadcast.emit(emit, moEnemy);
   }

@@ -8,7 +8,7 @@ export class GameService extends PrismaClient implements OnModuleInit {
     await this.$connect();
     this.logger.log('Database Connected');
   }
-  async updateMovement(movements: number, id: number) {
+  async updateMovement(movements: number, id: number, array: any) {
     try {
       await this.board.update({
         where: {
@@ -16,6 +16,8 @@ export class GameService extends PrismaClient implements OnModuleInit {
         },
         data: {
           movements: movements,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          pieces: array,
         },
       });
 
