@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 
 import { PrismaClient } from '@prisma/client';
-import { BoardDto } from './dto/create-board.dto';
+import { BoardDto, updateDto } from './dto/create-board.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -61,8 +61,50 @@ export class BoardService extends PrismaClient implements OnModuleInit {
     }
   }
 
-  findAll() {
-    return `This action returns all board`;
+  async playerWiner(data: updateDto) {
+    try {
+      const d = await this.users.findFirst({
+        where: {
+          user: data.name,
+        },
+      });
+
+      await this.users.update({
+        where: {
+          id: d?.id,
+        },
+        data: {
+          points: {
+            increment: 3,
+          },
+        },
+      });
+
+      if (data.color === 'Blancas') {
+        await this.board.update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            whiteWiner: true,
+          },
+        });
+      } else {
+        await this.board.update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            blackWiner: true,
+          },
+        });
+      }
+
+      return 'ok';
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return error;
+    }
   }
 
   findBoard(id: string) {

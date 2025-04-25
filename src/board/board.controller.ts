@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { BoardService } from './board.service';
-import { BoardDto } from './dto/create-board.dto';
+import { BoardDto, updateDto } from './dto/create-board.dto';
 
 @Controller('board')
 export class BoardController {
@@ -11,9 +11,9 @@ export class BoardController {
     return this.boardService.boardGame(boardDto);
   }
 
-  @Get()
-  findAll() {
-    return this.boardService.findAll();
+  @Post('/winer')
+  winer(@Body() data: updateDto) {
+    return this.boardService.playerWiner(data);
   }
 
   @Get(':id')
