@@ -15,6 +15,11 @@ import { canceledDto } from './dto/canceledPlayer.dto';
 import { Accept } from './dto/acceptInvitation.dto';
 import { TokenMatch } from './dto/dataToken.dto';
 
+interface Time {
+  min: number;
+  seg: number;
+}
+
 @WebSocketGateway({ cors: true })
 export class PlayersGateway implements OnModuleInit {
   @WebSocketServer()
@@ -55,8 +60,11 @@ export class PlayersGateway implements OnModuleInit {
   ) {
     const emit = data.userTo + 'accepted';
 
+    const time: Time | null =
+      data.time === null ? null : { min: Number(data.time), seg: 0 };
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const id = await this.playersService.createTable(data);
+    const id = await this.playersService.createTable(data, time);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     client.broadcast.emit(emit, id.id);

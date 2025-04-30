@@ -9,6 +9,10 @@ import { GameService } from './game.service';
 import { Socket } from 'socket.io';
 import { MovementDto } from './dto/create-game.dto';
 
+interface Time {
+  min: number;
+  seg: number;
+}
 @WebSocketGateway({ cors: true })
 export class GameGateway {
   constructor(private readonly gameService: GameService) {}
@@ -20,10 +24,14 @@ export class GameGateway {
   ) {
     const emit = moEnemy.userTo + 'movement';
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const time: Time = JSON.parse(moEnemy.time);
+
     await this.gameService.updateMovement(
       moEnemy.movements,
       moEnemy.id,
       moEnemy.array,
+      time,
     );
 
     client.broadcast.emit(emit, moEnemy);

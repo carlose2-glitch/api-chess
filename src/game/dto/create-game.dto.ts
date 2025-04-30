@@ -23,4 +23,6 @@ export class MovementDto {
   @IsNumber()
   id: number;
   array: Pieces[];
+  @IsString()
+  time: string;
 }

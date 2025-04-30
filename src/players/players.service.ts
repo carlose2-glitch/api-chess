@@ -7,6 +7,10 @@ interface Users {
   user: string;
   online: boolean;
 }
+interface Time {
+  min: number;
+  seg: number;
+}
 
 /*interface Pieces {
   name: string;
@@ -64,7 +68,12 @@ export class PlayersService extends PrismaClient implements OnModuleInit {
     return token;
   }
 
-  async createTable(data: Accept) {
+  async createTable(data: Accept, time: Time | null) {
+    const timeBoth =
+      time === null
+        ? Prisma.JsonNull
+        : ({ min: time.min, seg: time.seg } as Prisma.JsonObject);
+
     const array = [
       /*piezas negras */
       {
@@ -371,6 +380,8 @@ export class PlayersService extends PrismaClient implements OnModuleInit {
           userWhite: data.userTo,
           game: 'in-progress',
           time: data.time,
+          timeWhite: timeBoth,
+          timeBlack: timeBoth,
           pieces: array,
         },
       });

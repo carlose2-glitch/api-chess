@@ -32,5 +32,7 @@ model Board {
   userWhite String?
   game String
   time String?
+  timeWhite Json?
+  timeBlack Json?
   pieces Json
 }
