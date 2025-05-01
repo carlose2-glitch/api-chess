@@ -7,7 +7,7 @@ import {
 import { GameService } from './game.service';
 
 import { Socket } from 'socket.io';
-import { MovementDto } from './dto/create-game.dto';
+import { MovementDto, winerDto } from './dto/create-game.dto';
 
 interface Time {
   min: number;
@@ -35,5 +35,12 @@ export class GameGateway {
     );
 
     client.broadcast.emit(emit, moEnemy);
+  }
+
+  @SubscribeMessage('winner')
+  winer(@ConnectedSocket() client: Socket, @MessageBody() w: winerDto) {
+    const emit = w.user + 'winner';
+
+    client.broadcast.emit(emit, w);
   }
 }

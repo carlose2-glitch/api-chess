@@ -26,3 +26,12 @@ export class MovementDto {
   @IsString()
   time: string;
 }
+
+export class winerDto {
+  @IsString()
+  color: string;
+  @IsString()
+  user: string;
+  @IsNumber()
+  idBoard: number;
+}

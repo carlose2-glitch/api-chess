@@ -61,7 +61,9 @@ export class PlayersGateway implements OnModuleInit {
     const emit = data.userTo + 'accepted';
 
     const time: Time | null =
-      data.time === null ? null : { min: Number(data.time), seg: 0 };
+      data.time === 'null'
+        ? { min: 0, seg: 0 }
+        : { min: Number(data.time), seg: 0 };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const id = await this.playersService.createTable(data, time);
