@@ -16,10 +16,19 @@ export class BoardController {
     return this.boardService.playerWiner(data);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    const board = this.boardService.findBoard(id);
-    return board;
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   const board = this.boardService.findBoard(id);
+  //   return board;
+  // }
+
+  @Get('ranking')
+  async getRanking() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const getRanking = await this.boardService.getRanking();
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return getRanking;
   }
 
   @Delete(':id')

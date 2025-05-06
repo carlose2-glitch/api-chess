@@ -111,6 +111,20 @@ export class BoardService extends PrismaClient implements OnModuleInit {
     return `This action returns a #${id} board`;
   }
 
+  async getRanking() {
+    try {
+      const ranking = await this.users.findMany({
+        orderBy: {
+          points: 'desc',
+        },
+      });
+
+      return ranking;
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return error;
+    }
+  }
   remove(id: number) {
     return `This action removes a #${id} board`;
   }
