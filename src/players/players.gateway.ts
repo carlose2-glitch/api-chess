@@ -29,11 +29,17 @@ export class PlayersGateway implements OnModuleInit {
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
       const { user } = socket.handshake.auth;
+      const { game } = socket.handshake.auth;
+      const { board } = socket.handshake.auth;
 
       this.playersService.onUsersConnected({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         user: user,
         online: true,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        g: game,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        b: board,
       });
       this.server.emit('clients-online', this.playersService.getUsers());
 

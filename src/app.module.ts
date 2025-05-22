@@ -10,7 +10,15 @@ import { GameModule } from './game/game.module';
 import { BoardModule } from './board/board.module';
 
 @Module({
-  imports: [SingModule, LoginModule, tokenModule, PlayersModule, UsersModule, GameModule, BoardModule],
+  imports: [
+    SingModule,
+    LoginModule,
+    tokenModule,
+    PlayersModule,
+    UsersModule,
+    GameModule,
+    BoardModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

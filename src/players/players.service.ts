@@ -6,6 +6,8 @@ import { Prisma, PrismaClient } from '@prisma/client';
 interface Users {
   user: string;
   online: boolean;
+  g: boolean;
+  b: number;
 }
 interface Time {
   min: number;
